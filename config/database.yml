@@ -1,0 +1,26 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 30
+  port: 5432
+
+development:
+  <<: *default
+  database: scraper_app_development
+  username: matejci
+  password: '0000'
+  host: localhost
+
+test:
+  <<: *default
+  database: scraper_app_test
+  username: matejci
+  password: '0000'
+  host: localhost
+
+production:
+  <<: *default
+  database: <%= ENV['SCRAPER_APP_DATABASE'] %>
+  username: <%= ENV['SCRAPER_APP_DATABASE_USER'] %>
+  password: <%= ENV['SCRAPER_APP_DATABASE_PASSWORD'] %>
+  host: <%= ENV['SCRAPER_APP_DATABASE_HOST'] %>

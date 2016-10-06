@@ -2,6 +2,11 @@ class Item < ActiveRecord::Base
 	store_accessor :tags
 	store_accessor :image_urls
 	store_accessor :image_paths
+
+	scope :not_finished, -> { where(is_downloaded: false)}
+	scope :bags_not_finished, -> {where(item_type: 'bags', is_downloaded: false)}
+	scope :shoes_not_finished, -> {where(item_type: 'shoes', is_downloaded: false)}
+	scope :cloth_not_finished, -> {where(item_type: 'cloth', is_downloaded: false)}
 end
 
 # == Schema Information

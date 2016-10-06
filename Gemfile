@@ -43,6 +43,9 @@ gem 'whenever'
 
 gem 'dotenv-rails'
 gem 'nokogiri'
+gem 'simhash'
+gem 'jaccard'
+gem 's3'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

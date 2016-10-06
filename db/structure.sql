@@ -62,12 +62,15 @@ CREATE TABLE items (
     item_sub_type character varying,
     manufacturer character varying,
     is_scraped boolean DEFAULT false,
+    is_downloaded boolean DEFAULT false,
     tags hstore,
     image_urls hstore,
     image_paths hstore,
+    s3_image_urls hstore,
+    keywords hstore,
+    sim_hashes hstore,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    is_downloaded boolean DEFAULT false
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -129,6 +132,27 @@ CREATE INDEX index_items_on_image_urls ON items USING gin (image_urls);
 
 
 --
+-- Name: index_items_on_keywords; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_on_keywords ON items USING gin (keywords);
+
+
+--
+-- Name: index_items_on_s3_image_urls; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_on_s3_image_urls ON items USING gin (s3_image_urls);
+
+
+--
+-- Name: index_items_on_sim_hashes; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_on_sim_hashes ON items USING gin (sim_hashes);
+
+
+--
 -- Name: index_items_on_tags; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -153,6 +177,4 @@ INSERT INTO schema_migrations (version) VALUES ('20161001155342');
 INSERT INTO schema_migrations (version) VALUES ('20161002122955');
 
 INSERT INTO schema_migrations (version) VALUES ('20161002135532');
-
-INSERT INTO schema_migrations (version) VALUES ('20161003002852');
 

@@ -7,7 +7,6 @@
 /tmp
 
 # Environment files that may contain sensitive data
-.env
 .powenv
 dump.rdb
 .byebug_history
@@ -16,5 +15,12 @@ dump.rdb
 .sass-cache
 /db/*.sqlite3
 
-/config/database.yml
-/config/secrets.yml
+.env
+config/database.yml
+config/secrets.yml
+
+
+
+
+/project_info_data
+/downloaded_data
