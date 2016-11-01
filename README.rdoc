@@ -1,24 +1,85 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+ScraperApp
+----------
 
-Things you may want to cover:
+- ScraperApp is a collection of Ruby scripts (rake tasks) that are used to scrap different kind of data and download/upload it to AWS S3 bucket(s) or local storage.
+- Currently implemented features focus on fashion items from different sources.
+- Item types: Bags, Shoes, Cloth
+- Sources:
+	- Aggregator sites: MyTheresa, Net-A-Porter, Yoox
+	- Designer sites: Dolce & Gabbana, Fendi, Gucci, Jimmy Choo, LaPerla, Prada, Tom Ford
+- Scripts are simple and with little adjustment can be used to scrap different kind of content from various sources.
 
-* Ruby version
+Technical info:
+---------------
+- As already stated, scripts are written in Ruby and "hosted" in Rails environment
 
-* System dependencies
+Ruby version: 2.2.2
+Rails version: 4.2.5
+Postgres version 9.5
 
-* Configuration
+- Script can be executed using local DB (use for development/testing) or remote DB (used for production)
+- If you plan to run script using the local DB, then ensure you have installed Postgres 9.5 version
 
-* Database creation
+Setting up the project:
+-----------------------
+- Install RVM
+- Install Ruby 2.2.2
+- Create gemset 'yewno_scraper_app'
+- Install Postgres 9.5 (if you're using local DB)
+- Ensure you have `.env` and `database.yml` files in your app's root folder. If you are not familiar with those files, `.env` is used for sensitive info and environment variables and shouldn't be commited on public repos. It is used to store info like AWS access keys, passwords, usernames, DB hosts and so on. `database.yml` is config file used to specify connection string to your DB(s).
 
-* Database initialization
+- Run `bundle install` - to install gems
+- Run `bundle exec rake db:create` - to create DB
+- Run `bundle exec rake db:migrate` - to create DB schema
+- Run `bundle exec rake s3:create_s3_buckets` to create AWS S3 bucket(s)
+- Run `bundle exec rake local:create_folders` to create local folder structure (optional -> use if you want to download data to your local storage instead of AWS S3)
+- You're set, now you can run rake tasks (scripts)
 
-* How to run the test suite
+Folder structure:
+-----------------
+- All scripts are within `lib/tasks` folder
+- Some script helpers can be found in `lib/helpers` folder
+- `tasks/aws_s3_related` folder contains script which creates AWS S3 bucket(s) so content can be uploaded in appropriate bucket(s)
+- `tasks/local_folders` folder contains script which creates local folder structure so content can be downloaded directly to local drive
+- `tasks/fashion` folder contains script that are used to prepare (crawl for data), scrap and download data
+- `log` folder contains log files created by scripts
 
-* Services (job queues, cache servers, search engines, etc.)
+`tasks/fashion` folder has following structure:
 
-* Deployment instructions
+	<item_type>/<designer>/<source>/<all_files_that_actually_do_the_work>
+
+	So, if you, for example look inside `../tasks/fashion/bags/dolcegabbana/mytheresa` folder you can see following files:
+
+	- bags.csv
+	- download.rake
+	- preparation.rake
+	- s3_download.rake
+	- scraping.rake
+
+	Order of execution:
+
+	1. `preparation.rake` file contains rake task which is used to prepare (crawl for data) data which can be used for scraping later on.
+			- `prepare` task, crawls for links and creates a `bags.csv` file which contains link to be scraped.
+				To run this script inside your app's root folder type: `bundle exec rake bags_dg_mytheresa:prepare`
+
+	2- `scraping.rake` file contains rake task which is used to scrap relevant data from each link in `bags.csv` file.
+			- Please note that if you run this script now it can happen that some of the links inside `bags.csv` files are not relevant anymore (don't exist), so you should run task from `preparation.rake` file to prepare new valid links (old content will be replaced).
+			- To run this script inside your app's root folder type: `bundle exec rake bags_dg_mytheresa:scrap`
+
+	3. Finally you can run tasks from `download.rake` or `s3_download.rake` files. It depends where you want your files to be.
+		- If you prefare files to be downloaded to your local storage, run rake task from `download.rake` file: `bundle exec rake bags_dg_mytheresa:download`
+		- If you prefare files to be downloaded to AWS S3 bucket, run rake task from `s3_download.rake` file: `bundle exec rake bags_dg_mytheresa:s3_download`
+
+   Other folders inside `tasks/fashion/...` may have different (additional) files, but pretty much the same applies like in given example.
+   Data scraped from `yoox` aggregator doesn't have `preparation.rake` file (prepare script), because links are crawled manually using JavaScript...
+
+
+FUTURE DEVELOPMENT:
+-------------------
+- add 'bucket' inside `.env` file and read it from there, instead of typing in manually in each `s3_download.rake` file
+- consider using cron jobs (`whenever` gem + Sidekiq) to schedule scripts to run automatically
+
 
 * ...
