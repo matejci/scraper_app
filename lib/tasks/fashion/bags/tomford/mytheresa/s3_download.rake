@@ -3,12 +3,12 @@ require 'open-uri'
 require "#{Rails.root}/lib/helpers/download_helper.rb"
 include DownloadHelper
 
-logger = Logger.new("#{Rails.root}/log/netaporter.log")
+logger = Logger.new("#{Rails.root}/log/mytheresa.log")
 logger.level = Logger::WARN
 
 service = S3::Service.new(:access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'])
 
-namespace :bags_tf_netaporter do
+namespace :bags_tf_mytheresa do
 
    desc "Download Tom Ford bags data to AWS S3"
 	task s3_download: :environment do
@@ -22,7 +22,7 @@ namespace :bags_tf_netaporter do
 			return
 		end
 
-		items = Item.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "net-a-porter", false, "bags", "TomFord")
+		items = Item.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "mytheresa", false, "bags", "TomFord")
 
 		temp_bucket_objects = bucket.objects
 

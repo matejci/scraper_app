@@ -3,7 +3,7 @@ require 'open-uri'
 require "#{Rails.root}/lib/helpers/download_helper.rb"
 include DownloadHelper
 
-logger = Logger.new("#{Rails.root}/log/yoox.log")
+logger = Logger.new("#{Rails.root}/log/laperla.log")
 logger.level = Logger::WARN
 
 service = S3::Service.new(:access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'])

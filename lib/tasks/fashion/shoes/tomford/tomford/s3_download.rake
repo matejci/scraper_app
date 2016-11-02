@@ -9,7 +9,8 @@ logger.level = Logger::WARN
 service = S3::Service.new(:access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'])
 
 namespace :shoes_tf_tf do
-	desc "Download Tom Ford shoes data to AWS S3"
+
+   desc "Download Tom Ford shoes data to AWS S3"
 	task s3_download: :environment do
 
 		main_bucket = 'yewnofashion'
@@ -23,8 +24,9 @@ namespace :shoes_tf_tf do
 
 		items = Item.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "tomford", false, "shoes", "TomFord")
 
-		items.each do |item|
+		temp_bucket_objects = bucket.objects
 
+		items.each do |item|
 			s3_image_urls = []
 
 			parsed_images = item.image_urls['urls'].gsub(", nil",'')
@@ -33,8 +35,7 @@ namespace :shoes_tf_tf do
 			item_keywords = JSON.parse(item.keywords['keywords'])
 
 			#parse bucket objects to extract "middle folder" which we need to "compare" using the jaccard coefficient to find if similar folder already exists
-			middle_folders = prepare_s3_objects(bucket.objects, main_folder)
-
+			middle_folders = prepare_s3_objects(temp_bucket_objects, main_folder)
 			middle_folder = nil
 
 			#if there is no any "middle folder" present, create it from item keywords
@@ -42,38 +43,39 @@ namespace :shoes_tf_tf do
 				middle_folder = item_keywords.join("_")
 				middle_folder << "/"
 			else
-				middle_folder = DownloadHelper.prepare_middlefolder_jaccard_method(item_keywords, middle_folders)
-			end
+		 		middle_folder = DownloadHelper.prepare_middlefolder_jaccard_method(item_keywords, middle_folders)
+		 	end
 
-			object_keys = bucket.objects.map(&:key)
-			folder_exist = object_keys.include?(middle_folder)
+		   object_keys = temp_bucket_objects.map(&:key)
+		   folder_exist = object_keys.include?(middle_folder)
 
 			urls_arr.each do |url|
 				begin
-					stream = open(url)
 					file_name = url.split("/").last
-					file_content = (File.read(stream))
 
 					if folder_exist
-						new_object = bucket.objects.build(main_folder + middle_folder + file_name + ".jpg")
-						new_object.content = file_content
+						new_object = temp_bucket_objects.build(main_folder + middle_folder + file_name + ".jpg")
+						new_object.content = open(url)
 						new_object.acl = :public_read
 						new_object.save
 
+						temp_bucket_objects << new_object
 						s3_image_urls << new_object.url
 					else
-						new_folder = bucket.objects.build(main_folder + middle_folder)
+						new_folder = temp_bucket_objects.build(main_folder + middle_folder)
 						new_folder.content = ""
 						new_folder.acl = :public_read
 						new_folder.save
 
-						new_object = bucket.objects.build(main_folder + middle_folder + file_name + ".jpg")
-						new_object.content = file_content
+						temp_bucket_objects << new_folder
+
+						new_object = temp_bucket_objects.build(main_folder + middle_folder + file_name + ".jpg")
+						new_object.content = open(url)
 						new_object.acl = :public_read
 						new_object.save
 
+						temp_bucket_objects << new_object
 						s3_image_urls << new_object.url
-
 					end
 				rescue OpenURI::HTTPError => err
 					logger.fatal("#{Time.now} :Error: #{err} -> ITEM_ID: #{item.id}, URL: #{url}")
@@ -88,7 +90,6 @@ namespace :shoes_tf_tf do
 			end
 
 			item.update_attributes(:is_downloaded => true,  :s3_image_urls => {:urls => s3_image_urls.to_s })
-
 		end
 	end
 end
