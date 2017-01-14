@@ -65,12 +65,6 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { :host => 'scraper_app.com' }
 
-  Rails.application.config.middleware.use ExceptionNotification::Rack,
-  :email => {
-    :sender_address => 'noreply@scraper_app.com',
-    :exception_recipients => %w{ciloid@gmail.com}
-  }
-
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true

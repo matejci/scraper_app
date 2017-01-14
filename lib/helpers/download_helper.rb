@@ -54,12 +54,10 @@ module DownloadHelper
 			result_path = directory_to_list + item_keywords.join("_")
 			return result_path
 		end
-
 	end
 
 
 	def prepare_s3object_jaccard_method(item_keywords, s3_objects)
-
 		result = ''
 
 		s3_objects.each do |obj|
@@ -82,11 +80,9 @@ module DownloadHelper
 			result = item_keywords.join("_")
 			return result + "/"
 		end
-
 	end
 
 	def prepare_middlefolder_jaccard_method(item_keywords, middle_folders)
-
 		result = ''
 
 		middle_folders.each do |mf|
@@ -109,23 +105,19 @@ module DownloadHelper
 			result = item_keywords.join("_")
 			return result + "/"
 		end
-
 	end
 
 	def prepare_s3_folder_keywords(arr)
-
 		if arr.length > 1
 			keywords = arr[0].split("_")
 			return keywords
 		else
 			nil
 		end
-
 	end
 
 
 	def prepare_s3_objects(objects, main_folder)
-
 		result = []
 
 		objects.each do |o|
@@ -138,5 +130,4 @@ module DownloadHelper
 
 		result.length > 0 ? result : nil
 	end
-
 end
