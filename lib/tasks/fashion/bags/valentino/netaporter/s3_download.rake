@@ -10,10 +10,10 @@ service = S3::Service.new(:access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_ac
 
 namespace :bags_valentino_netaporter do
 
-   desc "Download Valentino bags data to AWS S3"
+  desc "Download Valentino bags data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'bags/valentino/'
 		bucket = service.buckets.find(main_bucket)
 

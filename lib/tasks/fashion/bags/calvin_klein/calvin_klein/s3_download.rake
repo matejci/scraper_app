@@ -13,7 +13,7 @@ namespace :bags_ck_ck do
   desc "Download Calvin Klein bags data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'bags/calvinklein/'
 		bucket = service.buckets.find(main_bucket)
 

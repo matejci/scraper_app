@@ -13,7 +13,7 @@ namespace :bags_chanel_chanel do
   desc "Download Chanel bags data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'bags/chanel/'
 		bucket = service.buckets.find(main_bucket)
 
