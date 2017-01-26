@@ -13,7 +13,7 @@ namespace :shoes_armani_yoox do
 	desc "Download Armani shoes data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'shoes/armani/'
 		bucket = service.buckets.find(main_bucket)
 
