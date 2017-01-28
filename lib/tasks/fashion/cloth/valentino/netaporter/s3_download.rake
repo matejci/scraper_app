@@ -13,7 +13,7 @@ namespace :cloth_valentino_netaporter do
    desc "Download Valentino cloth data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'cloth/valentino/'
 		bucket = service.buckets.find(main_bucket)
 
