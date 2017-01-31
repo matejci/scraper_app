@@ -12,7 +12,7 @@ namespace :cloth_miumiu_yoox do
 	task scrap: :environment do
 		file_content_array = []
 
-		File.foreach("#{Rails.root}/lib/tasks/fashion/cloth/miumiu/yoox/bags.csv") do |line|
+		File.foreach("#{Rails.root}/lib/tasks/fashion/cloth/miumiu/yoox/cloth.csv") do |line|
 			file_content_array << line.chomp
 		end
 
