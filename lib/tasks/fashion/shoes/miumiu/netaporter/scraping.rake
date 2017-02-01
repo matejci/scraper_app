@@ -38,7 +38,7 @@ namespace :shoes_miumiu_netaporter do
 					image_item.item_type = 'shoes'
 					image_item.item_sub_type = doc.css("#main-product").children().css('meta').first().attributes['content'].value
 					image_item.is_scraped = true
-					image_item.manufacturer = 'Miu Miu'
+					image_item.manufacturer = 'MiuMiu'
 
 					keywords = ScraperHelper.process_keywords(image_item.name)
 					image_item.keywords = {:keywords => keywords.to_s}

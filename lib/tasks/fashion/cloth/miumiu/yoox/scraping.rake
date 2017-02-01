@@ -37,7 +37,7 @@ namespace :cloth_miumiu_yoox do
 					image_item.item_type = 'cloth'
 					image_item.item_sub_type = ScraperHelper.parse_sub_type_string(doc.css("#itemTitle").children().css("span").children().last().text)
 					image_item.is_scraped = true
-					image_item.manufacturer = 'Miu Miu'
+					image_item.manufacturer = 'MiuMiu'
 
 					keywords = ScraperHelper.process_yoox_keywords(image_item.name)
 					image_item.keywords = {:keywords => keywords.to_s}

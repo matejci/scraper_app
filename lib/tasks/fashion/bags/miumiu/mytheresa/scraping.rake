@@ -39,7 +39,7 @@ namespace :bags_miumiu_mytheresa do
 					image_item.item_type = 'bags'
 					image_item.item_sub_type = 'Bags'
 					image_item.is_scraped = true
-					image_item.manufacturer = 'Miu Miu'
+					image_item.manufacturer = 'MiuMiu'
 
 					keywords = ScraperHelper.process_keywords(image_item.name)
 					image_item.keywords = {:keywords => keywords.to_s}
