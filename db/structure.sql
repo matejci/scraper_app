@@ -116,7 +116,9 @@ CREATE TABLE items (
     keywords hstore,
     sim_hashes hstore,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    image_url character varying,
+    s3_image_url character varying
 );
 
 
@@ -228,6 +230,13 @@ CREATE INDEX index_items_on_image_paths ON items USING gin (image_paths);
 
 
 --
+-- Name: index_items_on_image_url; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_on_image_url ON items USING btree (image_url);
+
+
+--
 -- Name: index_items_on_image_urls; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -239,6 +248,13 @@ CREATE INDEX index_items_on_image_urls ON items USING gin (image_urls);
 --
 
 CREATE INDEX index_items_on_keywords ON items USING gin (keywords);
+
+
+--
+-- Name: index_items_on_s3_image_url; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_items_on_s3_image_url ON items USING btree (s3_image_url);
 
 
 --
@@ -284,4 +300,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161002135532');
 INSERT INTO schema_migrations (version) VALUES ('20170114010514');
 
 INSERT INTO schema_migrations (version) VALUES ('20170114010630');
+
+INSERT INTO schema_migrations (version) VALUES ('20170131102218');
+
+INSERT INTO schema_migrations (version) VALUES ('20170131103620');
 
