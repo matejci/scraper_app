@@ -13,7 +13,7 @@ namespace :shoes_gr_yoox do
 	desc "Download Gianvito Rossi shoes data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'shoes/gianvitorossi/'
 		bucket = service.buckets.find(main_bucket)
 
@@ -22,7 +22,7 @@ namespace :shoes_gr_yoox do
 			return
 		end
 
-		items = ImageItem.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "yoox", false, "shoes", "Gianvito Rossi")
+		items = ImageItem.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "yoox", false, "shoes", "GianvitoRossi")
 
 		temp_bucket_objects = bucket.objects
 
