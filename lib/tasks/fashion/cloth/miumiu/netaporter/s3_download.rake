@@ -13,7 +13,7 @@ namespace :cloth_miumiu_netaporter do
    desc "Download Miu Miu cloth data to AWS S3"
 	task s3_download: :environment do
 
-		main_bucket = ENV['AWS_TEST_BUCKET']
+		main_bucket = ENV['AWS_BUCKET']
 		main_folder = 'cloth/miumiu/'
 		bucket = service.buckets.find(main_bucket)
 
@@ -22,7 +22,7 @@ namespace :cloth_miumiu_netaporter do
 			return
 		end
 
-		items = ImageItem.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "net-a-porter", false, "cloth", "Miu Miu")
+		items = ImageItem.where("source = ? AND is_downloaded = ? AND item_type = ? AND manufacturer = ?", "net-a-porter", false, "cloth", "MiuMiu")
 
 		temp_bucket_objects = bucket.objects
 
